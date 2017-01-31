@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Examen Frontend</title>
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/alertify.min.css" rel="stylesheet">
+	<link href="css/themes/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container">
+		<div class="row jumbotron">
+			<h1>Examen Frontend</h1>
+		</div>
+		<div class="row" style="margin-bottom: 30px;">
+			<div class="col-xs-3">
+				<div class="input-group">
+					<input id="txtNumero" type="text" class="form-control" placeholder="Ingresar número" onkeypress="return soloNumeros(event);">
+					<span class="input-group-btn">
+						<button class="btn btn-primary" type="button" onclick="agregarNumero()">Agregar</button>
+					</span>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<button class="btn btn-primary" type="button" onclick="ordenarNumeros()">Ordenar</button>
+				<button class="btn btn-default" type="button" onclick="limpiar()">Limpiar</button>
+			</div>
+		</div>
+		<div class="row well">
+			<p id="resultado" style="font-size: 30px;"></p>
+		</div>
+	</div>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/alertify.min.js"></script>
+	<script>
+		var lista = [];
+        var cadenaInicial = "";
+
+        function soloNumeros(e) {
+            var key = window.Event ? e.which : e.keyCode;
+            return (key >= 48 && key <= 57);
+        }
+
+        function agregarNumero() {
+            cadenaInicial = "";
+            if ($("#txtNumero").val() != null && $("#txtNumero").val() != "") {
+            	var numeroActual = parseInt($("#txtNumero").val());
+                var duplicado = lista.find(x => x == numeroActual);
+                if(duplicado == null){
+            		lista.push(numeroActual);
+	                cadenaInicial = convertirArregloACadena(lista);
+	                $("#resultado").text(cadenaInicial);
+                }
+                else{
+					alertify.warning("El número está duplicado");
+                }
+            } else {
+                alertify.warning("Debe ingresar número");
+            }
+            $("#txtNumero").val('');
+        }
+
+        function ordenarNumeros() {
+            cadenaInicial = "";
+            lista = lista.sort(ordenarResta);
+            cadenaInicial = convertirArregloACadena(lista);
+            $("#resultado").text(cadenaInicial);
+        }
+
+        function convertirArregloACadena(lista) {
+            var cadena = "";
+            lista.forEach(function(elemento) {
+                cadena = cadena + elemento + " ";
+            });
+            return cadena;
+        }
+
+        function ordenarResta(a, b) {
+            return a - b;
+        }
+
+        function limpiar() {
+            lista = [];
+            cadenaInicial = "";
+            $("#txtNumero").val('');
+            $("#resultado").text('');
+        }
+
+        $('#txtNumero').keypress(function(e) {
+            if (e.keyCode == 13) {
+                agregarNumero();
+            }
+        }); 
+
+	</script>
+</body>
+</html>
